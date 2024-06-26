@@ -1,234 +1,103 @@
-<style>
-
-@import url("https://fonts.googleapis.com/css?family=Montserrat");
-
-body {
-  font-family: "Montserrat", sans-serif;
-  background-color: #f8ecf5;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 700px;
-}
-
-header {
-  background-color: #333;
-  color: #fff;
-  padding: 20px;
-  text-align: center;
-}
-
-header h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-nav ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-}
-
-nav ul li {
-  margin: 0 10px;
-}
-
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-main {
-  padding: 20px;
-}
-
-.blog-entries {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 20px;
-}
-
-.entry {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: rgb(241, 241, 241);
-}
-
-.entry h2 {
-  margin-top: 0;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.tags {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-start;
-  cursor: pointer;
-}
-
-.tag {
-  background-color: #f2f2f2;
-  padding: 5px 10px;
-  border-radius: 3px;
-  margin-right: 5px;
-  font-size: 14px;
-  border: 1px solid gray;
-}
-
-.tag:hover {
-  background-color: #e5e5e5;
-}
-
-footer {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  clear: both;
-}
-
-footer p {
-  font-size: 12px;
-}
-
-.menu-btn,
-.close-btn,
-#clean-btn {
-  font-size: 24px;
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-
-.nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  transform: translateY(-100%);
-  transition: transform 0.5s ease;
-}
-
-.nav-open {
-  transform: translateY(0);
-}
-
-.nav ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 24px;
-}
-
-.nav li {
-  line-height: 30px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.tag {
-  background-color: #f2f2f2;
-  padding: 5px 10px;
-  border-radius: 3px;
-  margin-right: 5px;
-  font-size: 14px;
-}
-
-.tag:hover {
-  background-color: #e5e5e5;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #333;
-  color: #fff;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-}
-
-#clean_tags{
-  font-size: 24px;
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-}
-
-
-</style>
-
 <template>
-  <h1>Lo que aprendí</h1>
-  
-  <button class="menu-btn" @click="toggleMenu" :aria-expanded="menuOpen">Tags</button>
-  
-  <nav class="nav" :class="{ 'nav-open': menuOpen }" :aria-hidden="menuOpen" @click.self="toggleMenu">
-    <button class="close-btn" @click="toggleMenu">Cerrar</button>
-    <ul>
-      <li v-for="tag in tags" :key="tag" @click="filterByTag(tag)">{{ tag }}</li>
-      <li id="clean-btn" @click="clearFilter">Limpiar</li>
-    </ul>
-  </nav>
-  
-  <div class="blog-entries">
-    <article class="entry" v-for="entry in filteredEntries" :key="entry.id">
-      <p>{{ entry.content }}</p>
-      <div class="tags">
-        <span class="tag" v-for="tag in entry.tags" :key="tag" @click="filterByTag(tag)">{{ tag }}</span>
+  <div class="landing-page">
+    <header class="header">
+      <h1>Observatorio cognitivo</h1>
+      <p>Explore the world of cognitive science with us.</p>
+      <button class="cta-button">Get Started</button>
+    </header>
+    <section class="features">
+      <div class="feature">
+        <h2>Research</h2>
+        <p>Stay updated with the latest research and developments.</p>
       </div>
-    </article>
+      <div class="feature">
+        <h2>Resources</h2>
+        <p>Access a wide range of cognitive science resources.</p>
+      </div>
+      <div class="feature">
+        <h2>Community</h2>
+        <p>Join a community of like-minded individuals.</p>
+      </div>
+    </section>
+    <footer class="footer">
+      <p>&copy; 2024 Cognitive Observatory. All rights reserved.</p>
+    </footer>
   </div>
 </template>
 
-<script>
-
-import contentData from '../entries.json'
-
-export default {
-  data() {
-    return {
-    menuOpen: false,
-    tags: Array.from(new Set(contentData.flatMap(entry => entry.tags))),
-    entries: contentData,
-    selectedTag: null
-  }
-},
-  computed: {
-    filteredEntries() {
-      if (this.selectedTag) {
-        return this.entries.filter(entry => entry.tags.includes(this.selectedTag));
-      } else {
-        return this.entries;
-      }
-    }
-  },
-  methods: {
-    toggleMenu() {
-      this.menuOpen = !this.menuOpen;
-    },
-    filterByTag(tag) {
-      this.selectedTag = tag;
-      this.toggleMenu();
-    },
-    clearFilter() {
-      this.selectedTag = null;
-      this.toggleMenu();
-    }
-  },
+<style>
+.landing-page {
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  text-align: center;
+  padding: 0 20px;
 }
-</script>
+
+.header {
+  background: linear-gradient(135deg, #6200ea, #03dac6);
+  color: white;
+  padding: 50px 20px;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 3em;
+  margin: 0;
+}
+
+.header p {
+  font-size: 1.2em;
+  margin: 20px 0;
+}
+
+.cta-button {
+  background-color: #03dac6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #018786;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.feature {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+  width: 30%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+}
+
+.feature h2 {
+  color: #6200ea;
+  margin-bottom: 10px;
+}
+
+.footer {
+  background-color: #6200ea;
+  color: white;
+  padding: 20px 0;
+}
+
+.footer p {
+  margin: 0;
+}
+</style>
